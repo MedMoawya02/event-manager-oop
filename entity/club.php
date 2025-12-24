@@ -27,4 +27,11 @@ class Club{
         $sql="DELETE FROM club WHERE idClub='$id'";
         $conn->query($sql);
     }
+
+    //modifier un club 
+    public function update($id,$newName){
+        $conn=$this->db->getConnection();
+        $sql="UPDATE  club set nom='$newName' WHERE idClub='$id'";
+        $conn->query($sql);
+    }
 }
