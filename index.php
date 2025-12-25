@@ -1,10 +1,13 @@
 <?php
 require_once "entity/club.php";
 require_once "entity/equipe.php";
+require_once "entity/joueur.php";
+require_once "entity/tournoi.php";
+require_once "entity/match.php";
 
 
 
-/* function input(string $label): string
+ function input(string $label): string
 {
     echo $label . ": ";
     return trim(fgets(STDIN));
@@ -14,9 +17,11 @@ require_once "entity/equipe.php";
 while (true) {
     echo "menu\n";
     echo "1. AJouter un club\n";
-    echo "2. Afficher un club\n";
-    echo "3. Supprimer un club\n";
-    echo "4. Modifier un club\n";
+    echo "2. Ajouter un equipe\n";
+    echo "3. Ajouter un joueur\n";
+    echo "4. ajouter un tournoi\n";
+    echo "5. generez les matchs\n";
+    echo "6. Ajoutez les resultas\n";
 
 
 
@@ -29,33 +34,60 @@ while (true) {
             break;
         
         case '2':
-            $c = new Club();
-            $rows = $c->getAll();
-            foreach ($rows as $key => $value) {
-                echo $value['nom'];
-            }
+            $nom=input("Entrez le nom : ");
+            $jeu=input("Entrez le jeu : ");
+            $idClub=input("Entrez l'id club : ");
+            $e = new Equipe($nom,$jeu,$idClub);
+            $e->createEquipe();
             break;
 
         case '3':
-            $c = new Club();
-            $id=input("L'id du club a supprimer : ");
-            $c->delete($id);
+            $joueur = new Joueur(input("Entrez le pseudo "),input("Entrez le role "),input("saisez le salire "),input("entrez l'id de son equipe "));
+            $joueur->createJoueur();
+            break;
 
         case '4':
-            $c = new Club();
-            $id=input("L'id du club a editer : ");
-            $nouveauNom=input("Entrez le nouveau nom : ");
-            $c->update($id,$nouveauNom);
+            $tournoi = new Tournoi(input("Le titre du tournoi "),input("cashPrize "),input("Level "));
+            $tournoi->createTournoi();
+            break;
+
+        case 5:
+            $equipe=(new Equipe())->getEquipes();
+            shuffle($equipe);
+            for($i=0;$i<count($equipe);$i+=2){
+                if(isset($equipe[$i+1])){
+                    $match=new Mmatch(
+                        $equipe[$i]['idEquipe'],
+                        $equipe[$i+1]['idEquipe'],
+                        1
+                    );
+                    $match->createMatch();
+                }
+            }
+            echo "matches gnerés avec success";
+            break;
         default:
             break;
      
     }
-} */
-$equipe1=new Equipe();
+} 
+/* $equipe1=new Equipe();
 $equipe1->setNom('equipe');
 $equipe1->setJeu('jeu1');
 $equipe1->setIdClub(2);
 $equipe1->createEquipe();
-var_dump($equipe1->__tostring());
-
+var_dump($equipe1->__tostring()); */
+/* $joueur1=new Joueur("med","capitaine",30000,2);
+$joueur1->createJoueur(); */
+/* $equipe2=new Equipe("equipe 2","jeu 2", 3);
+$equipe2->createEquipe(); */
+/* $tournoi=new tournoi("ucl",1000000,"Aller Retour");
+$match=new Mmatch(2,1,6,7,3);
+$match2=new Mmatch(2,4,6,7,3);
+$match2->createMatch(); */
+/* $equipe=new Equipe("rca","e",2);
+$rows=$equipe->getEquipes();
+foreach($rows as $key=>$value){
+    echo $value['nom']."<br>";
+} */
 ?>
