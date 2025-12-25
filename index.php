@@ -22,6 +22,7 @@ while (true) {
     echo "4. ajouter un tournoi\n";
     echo "5. generez les matchs\n";
     echo "6. Ajoutez les resultas\n";
+    echo "7. Annuler un match\n";
 
 
 
@@ -66,6 +67,17 @@ while (true) {
             }
             echo "matches gnerés avec success";
             break;
+
+        case 6:
+            $match=new Mmatch();
+            $match->addScore(input("Entrez l'id du match "),input("score_A"),input("score_B"));
+            break;
+        
+        case '7':
+            $match=new Mmatch();
+            $match->deleteMatch(input("L'id de match a annuler "));
+            break;
+
         default:
             break;
      
