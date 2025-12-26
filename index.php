@@ -7,7 +7,7 @@ require_once "entity/match.php";
 
 
 
- function input(string $label): string
+function input(string $label): string
 {
     echo $label . ": ";
     return trim(fgets(STDIN));
@@ -23,6 +23,7 @@ while (true) {
     echo "5. generez les matchs\n";
     echo "6. Ajoutez les resultas\n";
     echo "7. Annuler un match\n";
+    echo "8. Statistiques\n";
 
 
 
@@ -33,33 +34,33 @@ while (true) {
             $c->nom = input("Le nom du club");
             $c->create();
             break;
-        
+
         case '2':
-            $nom=input("Entrez le nom : ");
-            $jeu=input("Entrez le jeu : ");
-            $idClub=input("Entrez l'id club : ");
-            $e = new Equipe($nom,$jeu,$idClub);
+            $nom = input("Entrez le nom : ");
+            $jeu = input("Entrez le jeu : ");
+            $idClub = input("Entrez l'id club : ");
+            $e = new Equipe($nom, $jeu, $idClub);
             $e->createEquipe();
             break;
 
         case '3':
-            $joueur = new Joueur(input("Entrez le pseudo "),input("Entrez le role "),input("saisez le salire "),input("entrez l'id de son equipe "));
+            $joueur = new Joueur(input("Entrez le pseudo "), input("Entrez le role "), input("saisez le salire "), input("entrez l'id de son equipe "));
             $joueur->createJoueur();
             break;
 
         case '4':
-            $tournoi = new Tournoi(input("Le titre du tournoi "),input("cashPrize "),input("Level "));
+            $tournoi = new Tournoi(input("Le titre du tournoi "), input("cashPrize "), input("Level "));
             $tournoi->createTournoi();
             break;
 
         case 5:
-            $equipe=(new Equipe())->getEquipes();
+            $equipe = (new Equipe())->getEquipes();
             shuffle($equipe);
-            for($i=0;$i<count($equipe);$i+=2){
-                if(isset($equipe[$i+1])){
-                    $match=new Mmatch(
+            for ($i = 0; $i < count($equipe); $i += 2) {
+                if (isset($equipe[$i + 1])) {
+                    $match = new Mmatch(
                         $equipe[$i]['idEquipe'],
-                        $equipe[$i+1]['idEquipe'],
+                        $equipe[$i + 1]['idEquipe'],
                         1
                     );
                     $match->createMatch();
@@ -69,20 +70,51 @@ while (true) {
             break;
 
         case 6:
-            $match=new Mmatch();
-            $match->addScore(input("Entrez l'id du match "),input("score_A"),input("score_B"));
-            break;
-        
-        case '7':
-            $match=new Mmatch();
-            $match->deleteMatch(input("L'id de match a annuler "));
+            $match = new Mmatch();
+            $match->addScore(input("Entrez l'id du match "), input("score_A"), input("score_B"));
             break;
 
+        case '7':
+            $match = new Mmatch();
+            $match->deleteMatch(input("L'id de match a annuler "));
+            break;
+        case '8':
+            echo "menu\n";
+            echo "1. Nombre total des matches\n";
+            echo "2. Nombres des joueurs pour chaque equipe\n";
+            echo "3. Nombre des matches par tournoi\n";
+            $choix = input('Quelle statistique tu veut ');
+            switch ($choix) {
+                case '1':
+                    $m = new Mmatch();
+                    echo "Le nombre total des matches est :" . $m->getNbr() . "\n";
+                    break;
+
+                case '2':
+                    $e = new Equipe();
+                    $rows = $e->nbrJoueurs();
+                    foreach ($rows as $row) {
+                        echo "L'equipe " . $row['nom'] . " contient " . $row['nbr_joueurs'] . " joueurs\n";
+                    }
+                    break;
+
+                case '3':
+                    $m = new Mmatch();
+                    $rows = $m->getTournoiMatches();
+                    foreach ($rows as $row) {
+                        echo "Le tournoi " . $row['titre'] . " contient " . $row['total_matches'] . " matches\n";
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            break;
         default:
             break;
-     
+
     }
-} 
+}
 /* $equipe1=new Equipe();
 $equipe1->setNom('equipe');
 $equipe1->setJeu('jeu1');

@@ -48,4 +48,15 @@ class Equipe{
         return  "Equipe : " .$this->nom;
     }
 
+    //nbr joueur pour chaque equipe
+    public function nbrJoueurs(){
+        $conn=$this->db->getConnection();
+        $sql="SELECT nom ,COUNT(joueur.idJoueur) AS nbr_joueurs FROM equipe 
+            LEFT JOIN joueur ON equipe.idEquipe=joueur.idEquipe 
+            GROUP BY equipe.idEquipe;
+        ";
+        $result=$conn->query($sql)->fetch_all(MYSQLI_ASSOC);
+        return $result;
+    }
+
 }

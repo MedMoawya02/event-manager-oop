@@ -46,4 +46,25 @@ class Mmatch{
         $sql="DELETE FROM mmatch WHERE idMatch='$id'";
         $conn->query($sql);
     }
+
+    //get nbr of matches
+    public function getNbr(){
+        $conn=$this->db->getConnection();
+        $sql="SELECT COUNT(idMatch)AS total_matches FROM mmatch";
+        $result=$conn->query($sql);
+        $row=$result->fetch_assoc();
+        return $row['total_matches'];
+    }
+
+    //nombre des matches pour chaque tournoi
+    public function getTournoiMatches(){
+        $conn=$this->db->getConnection();
+        $sql="SELECT titre ,COUNT(idMatch) AS total_matches FROM tournoi 
+            INNER JOIN mmatch ON tournoi.idTournoi=mmatch.idTournoi
+            GROUP BY tournoi.idTournoi
+        ";
+        $result=$conn->query($sql);
+        $rows=$result->fetch_all(MYSQLI_ASSOC);
+        return $rows;
+    }
 }
